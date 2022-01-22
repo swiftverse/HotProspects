@@ -11,6 +11,9 @@
 		2432AD99279C3DBD00104F89 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2432AD98279C3DBD00104F89 /* ContentView.swift */; };
 		2432AD9B279C3DBE00104F89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2432AD9A279C3DBE00104F89 /* Assets.xcassets */; };
 		2432AD9E279C3DBE00104F89 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2432AD9D279C3DBE00104F89 /* Preview Assets.xcassets */; };
+		2432ADAA279C4B1500104F89 /* ProspectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2432ADA9279C4B1500104F89 /* ProspectsView.swift */; };
+		2432ADAC279C4B1F00104F89 /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2432ADAB279C4B1F00104F89 /* MeView.swift */; };
+		2432ADAE279C4C2D00104F89 /* Prospect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2432ADAD279C4C2D00104F89 /* Prospect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		2432AD98279C3DBD00104F89 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2432AD9A279C3DBE00104F89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2432AD9D279C3DBE00104F89 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2432ADA9279C4B1500104F89 /* ProspectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProspectsView.swift; sourceTree = "<group>"; };
+		2432ADAB279C4B1F00104F89 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		2432ADAD279C4C2D00104F89 /* Prospect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prospect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +57,12 @@
 		2432AD95279C3DBD00104F89 /* HotProspects */ = {
 			isa = PBXGroup;
 			children = (
+				2432ADA8279C4A9900104F89 /* Extensions */,
+				2432ADA7279C4A9200104F89 /* Resources */,
+				2432ADA6279C4A8A00104F89 /* ViewModel */,
+				2432ADA5279C4A8200104F89 /* Model */,
+				2432ADA4279C4A7900104F89 /* Views */,
 				2432AD96279C3DBD00104F89 /* HotProspectsApp.swift */,
-				2432AD98279C3DBD00104F89 /* ContentView.swift */,
 				2432AD9A279C3DBE00104F89 /* Assets.xcassets */,
 				2432AD9C279C3DBE00104F89 /* Preview Content */,
 			);
@@ -65,6 +75,45 @@
 				2432AD9D279C3DBE00104F89 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2432ADA4279C4A7900104F89 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2432AD98279C3DBD00104F89 /* ContentView.swift */,
+				2432ADA9279C4B1500104F89 /* ProspectsView.swift */,
+				2432ADAB279C4B1F00104F89 /* MeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2432ADA5279C4A8200104F89 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2432ADAD279C4C2D00104F89 /* Prospect.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		2432ADA6279C4A8A00104F89 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2432ADA7279C4A9200104F89 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2432ADA8279C4A9900104F89 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +186,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2432ADAC279C4B1F00104F89 /* MeView.swift in Sources */,
+				2432ADAE279C4C2D00104F89 /* Prospect.swift in Sources */,
+				2432ADAA279C4B1500104F89 /* ProspectsView.swift in Sources */,
 				2432AD99279C3DBD00104F89 /* ContentView.swift in Sources */,
 				2432AD97279C3DBD00104F89 /* HotProspectsApp.swift in Sources */,
 			);
