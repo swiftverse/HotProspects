@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CodeScanner
 
 
 enum FilterType {
@@ -20,7 +21,7 @@ enum FilterType {
 
 struct ProspectsView: View {
     @EnvironmentObject var prospects: Prospects
-
+    @State private var isShowingScanner = false
     var filter: FilterType
     var result: String {
         switch filter {
@@ -57,24 +58,63 @@ struct ProspectsView: View {
                         Text(item.email)
                             .foregroundColor(.secondary)
                     }
+                    .swipeActions {
+                        if item.isContacted {
+                            Button {
+                                prospects.toggle(item)
+                            }
+                        label: {
+                            Label("Mark uncontacted", systemImage: "person.crop.circle.badge.xmark")
+                        }
+                        .tint(.blue)
+                        }
+                        
+                        else {
+                            Button {
+                                prospects.toggle(item)
+                            }
+                        label: {
+                            Label("Mark Contacted", systemImage: "person.crop.circle.fill.badge.checkmark")
+
+                        }
+                        .tint(.green)
+                        }
+                    }
                 }
             }
                 .navigationTitle(result)
                 .toolbar {
                     Button {
-                        let prospect = Prospect()
-                        prospect.name = "DareDance"
-                        prospect.email = "daredance@email.com"
-                        prospect.isContacted = true
-                        prospects.people.append(prospect)
+                        isShowingScanner = true
                     } label: {
                         Image(systemName: "qrcode.viewfinder")
                     }
 
                 }
+                .sheet(isPresented: $isShowingScanner) {
+                    CodeScannerView(codeTypes: [.qr], simulatedData: "Paul Hudson\npaul@hackingwithswift.com", completion: handleScan)
+
+                    }
                 
         }
         
+    }
+    
+    func handleScan(result: Result<ScanResult, ScanError>) {
+        isShowingScanner = false
+        switch result {
+        case .success(let result):
+            let details = result.string.components(separatedBy: "\n")
+            guard details.count == 2 else { return }
+            
+            let person = Prospect()
+            person.name = details[0]
+            person.email = details[1]
+            prospects.add(person)
+            
+        case .failure(let error):
+            print("Scanning failed : \(error.localizedDescription)")
+        }
     }
 }
 
