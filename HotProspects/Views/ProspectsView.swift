@@ -7,7 +7,7 @@
 
 import SwiftUI
 import CodeScanner
-
+import UserNotifications
 
 enum FilterType {
     case none
@@ -15,14 +15,19 @@ enum FilterType {
     case notContacted
 }
 
-
+enum SortData {
+    case byName
+    case byDate
+}
 
 
 
 struct ProspectsView: View {
     @EnvironmentObject var prospects: Prospects
     @State private var isShowingScanner = false
+    @State private var sortIsActive = false
     var filter: FilterType
+    @State var sort = SortData.byDate
     var result: String {
         switch filter {
         case .none:
@@ -46,18 +51,41 @@ struct ProspectsView: View {
         }
         
     }
+    
+    
+    
+    var sortedProspect: [Prospect] {
+        switch sort {
+        case .byName:
+            return filteredProspects.sorted()
+        case .byDate:
+            return filteredProspects.sorted { lhs, rhs in
+                if  lhs.dateAdded != rhs.dateAdded {
+                    return lhs.dateAdded < rhs.dateAdded
+                } else { return lhs.id < rhs.id }
+            }
+                    
+        }
+    }
+    
+    
   
     var body: some View {
         NavigationView {
             List {
-                ForEach(filteredProspects) {
+                ForEach(sortedProspect) {
                     item in
+                    HStack {
                     VStack(alignment: .leading) {
                         Text(item.name)
                             .font(.headline)
                         Text(item.email)
                             .foregroundColor(.secondary)
                     }
+                        Spacer()
+                        Image(systemName: item.isContacted ? "person.fill.checkmark" : "person.fill.xmark")
+                    }
+                
                     .swipeActions {
                         if item.isContacted {
                             Button {
@@ -78,16 +106,40 @@ struct ProspectsView: View {
 
                         }
                         .tint(.green)
+                            
+                            Button {
+                                addNotification(for: item)
+                            } label: {
+                                Label("Remind Me", systemImage: "bell")
+                            }
+                            .tint(.orange)
                         }
                     }
                 }
+                
             }
+            
                 .navigationTitle(result)
                 .toolbar {
-                    Button {
-                        isShowingScanner = true
-                    } label: {
-                        Image(systemName: "qrcode.viewfinder")
+//                    Button {
+//                        isShowingScanner = true
+//                    } label: {
+//                        Image(systemName: "qrcode.viewfinder")
+//                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isShowingScanner = true
+                        } label: {
+                            Image(systemName: "qrcode.viewfinder")
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            sortIsActive = true
+                        } label: {
+                            Image(systemName: "arrow.up.arrow.down.circle.fill")
+                        }
                     }
 
                 }
@@ -96,6 +148,17 @@ struct ProspectsView: View {
 
                     }
                 
+        }
+        .confirmationDialog("Choose Sort", isPresented: $sortIsActive) {
+            Button("Sort Names") {
+                print("names sort")
+                sort = .byName
+            }
+            
+            Button("Sort Recent") {
+                sort = .byDate
+                
+            }
         }
         
     }
@@ -114,6 +177,40 @@ struct ProspectsView: View {
             
         case .failure(let error):
             print("Scanning failed : \(error.localizedDescription)")
+        }
+    }
+    
+    func addNotification(for prospect: Prospect) {
+        let center = UNUserNotificationCenter.current()
+        
+        let addRequest = {
+            let content = UNMutableNotificationContent()
+            content.title = "Contact \(prospect.name)"
+            content.subtitle = prospect.email
+            content.sound = UNNotificationSound.default
+            
+            var dateComponents = DateComponents()
+            dateComponents.hour = 9
+            
+           // let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            
+            center.add(request)
+        }
+        
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .authorized {
+                addRequest()
+            } else {
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                            if success {
+                                addRequest()
+                            } else {
+                                print("D'oh")
+                            }
+                }
+            }
         }
     }
 }
